@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-ROOT=$(realpath -s $(dirname ${BASH_SOURCE[0]})/..)
-
 export PROJECT=
 export REPO=repro
 export TAG=$(date +"%Y%m%d%H%M%S")
