@@ -20,7 +20,7 @@ dependencies {
 	implementation "com.google.auto.service:auto-service:${auto_service}"
 
 	def beam = '2.29.0'
-	runtimeOnly "org.apache.beam:beam-sdks-java-expansion-service:${beam}"
+	implementation "org.apache.beam:beam-sdks-java-expansion-service:${beam}"
 
 	implementation "com.solace.connector.beam:beam-sdks-java-io-solace:1.0.0"
 }
