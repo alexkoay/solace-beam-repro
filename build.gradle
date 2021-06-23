@@ -1,0 +1,54 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'java'
+	id 'eclipse'
+}
+
+repositories {
+	maven {
+		url = uri('https://repository.apache.org/content/repositories/snapshots/')
+	}
+
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
+}
+
+dependencies {
+	def auto_service = '1.0'
+	annotationProcessor "com.google.auto.service:auto-service:${auto_service}"
+	implementation "com.google.auto.service:auto-service:${auto_service}"
+
+	def beam = '2.29.0'
+	runtimeOnly "org.apache.beam:beam-sdks-java-expansion-service:${beam}"
+
+	implementation "com.solace.connector.beam:beam-sdks-java-io-solace:1.0.0"
+}
+
+shadowJar {
+	manifest {
+		attributes 'Main-Class': 'org.apache.beam.sdk.expansion.service.ExpansionService'
+	}
+}
+
+task runExpansionService(type: JavaExec) {
+  	classpath = files(tasks.shadowJar)
+  	main = 'org.apache.beam.sdk.expansion.service.ExpansionService'
+}
+
+eclipse.classpath {
+    defaultOutputDir = file('build/eclipse-default')
+	file.whenMerged {
+      	entries.each { entry ->
+        	if (entry.kind == 'src' && entry.hasProperty('output')) {
+          		entry.output = entry.output.replace('bin/', "build/eclipse/")
+        	}
+    	}
+	}
+}
+
+group = 'ai.aliz'
+version = '1.0'
+description = 'expansion-service'
+java.sourceCompatibility = JavaVersion.VERSION_11
+java.targetCompatibility = JavaVersion.VERSION_11
